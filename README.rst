@@ -19,8 +19,7 @@ Here is an example:
     @myapp.get('/')
     @view('index')
     def index():
-        i18n_msg = myapp._('test i18n in python')
-        return {'i18n_msg':i18n_msg, '_':myapp._}
+        return {}
 
 
 You index.tpl may look like below:
@@ -28,8 +27,7 @@ You index.tpl may look like below:
 ::
 
     <p>
-      {{ i18n_msg }}
-    </p>
-    <p>
       {{ _('test i18n in bottle template') }}
+      {{ _('A person', '%(count)d people', 1, {'count': 1}) }}
+      {{ _('A person', '%(count)d people', 2, {'count': 2}) }}
     </p>

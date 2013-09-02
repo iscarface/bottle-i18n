@@ -2,8 +2,7 @@ import gettext
 import os
 import re
 
-import bottle
-from bottle import PluginError, request
+from bottle import BaseTemplate, PluginError, request
 
 # Format of http.request.header.Accept-Language.
 # refs: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
@@ -25,20 +24,14 @@ class I18NPlugin(object):
         self.locale_dir = locale_dir
         self.lang_code = lang_code
         self.lang_cache = {}
-        self.__old_template = bottle.template
 
 
     def setup(self, app):
-        bottle.template = self.template
+        BaseTemplate.defaults['_'] = self.gettext
 
 
     def close(self):
-        bottle.template = self.__old_template
-
-
-    def template(self, *args, **kwargs):
-        kwargs['_'] = self.gettext
-        return self.__old_template(*args, **kwargs)
+        del BaseTemplate.defaults['_']
 
 
     def gettext(self, message, plural=None, n=None, expansion=None):
